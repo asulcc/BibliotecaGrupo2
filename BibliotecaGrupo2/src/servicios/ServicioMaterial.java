@@ -8,12 +8,12 @@ package servicios;
  *
  * @author Patrick
  */
-public class PrestamoMaterial extends PrestamoBase {
+public class ServicioMaterial extends PrestamoBase {
     private Material material;
     private boolean estaActivo;
     private boolean esReserva;
 
-    public PrestamoMaterial(int id, Usuario usuario, Material material, LocalDate fechaPrestamo, 
+    public ServicioMaterial(int id, Usuario usuario, Material material, LocalDate fechaPrestamo, 
             LocalDate fechaDevolucionPrevista, LocalDate fechaDevolucionReal, boolean extendido, 
             boolean estaActivo, boolean esReserva) {
         super(id, usuario, fechaPrestamo, fechaDevolucionPrevista, fechaDevolucionReal, extendido);
