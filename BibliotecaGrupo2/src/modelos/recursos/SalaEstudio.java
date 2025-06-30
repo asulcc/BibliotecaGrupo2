@@ -1,11 +1,14 @@
 package modelos.recursos;
 
 public class SalaEstudio extends Recurso {
-    private int capacidad;
-    private boolean tieneProyector;
+    private final int capacidad;
+    private final boolean tieneProyector;
 
-    public SalaEstudio(int id, String nombre, String ubicacion, int capacidad, boolean tieneProyector) {
+    public SalaEstudio(String id, String nombre, String ubicacion, int capacidad, boolean tieneProyector) {
         super(id, nombre, ubicacion);
+        if (capacidad <= 0) {
+            throw new IllegalArgumentException("La capacidad debe ser mayor que cero");
+        }
         this.capacidad = capacidad;
         this.tieneProyector = tieneProyector;
     }
@@ -14,25 +17,13 @@ public class SalaEstudio extends Recurso {
         return capacidad;
     }
 
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public boolean isTieneProyector() {
+    public boolean hasProyector() {
         return tieneProyector;
     }
 
-    public void setTieneProyector(boolean tieneProyector) {
-        this.tieneProyector = tieneProyector;
-    }
-
     @Override
-    public void mostrarDetalles() {
-        System.out.println("Sala de Estudio - ID: " + id +
-                           ", Nombre: " + nombre +
-                           ", Ubicación: " + ubicacion +
-                           ", Disponible: " + disponible +
-                           ", Capacidad: " + capacidad +
-                           ", Tiene Proyector: " + (tieneProyector ? "Sí" : "No"));
+    public String toString() {
+        return super.toString() + String.format(", capacidad=%d, proyector=%b", capacidad, tieneProyector);
     }
 }
+

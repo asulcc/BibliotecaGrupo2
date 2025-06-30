@@ -1,11 +1,17 @@
 package modelos.recursos;
 
 public class Tableta extends Recurso {
-    private String marca;
-    private int pulgadas;
+    private final String marca;
+    private final int pulgadas;
 
-    public Tableta(int id, String nombre, String ubicacion, String marca, int pulgadas) {
+    public Tableta(String id, String nombre, String ubicacion, String marca, int pulgadas) {
         super(id, nombre, ubicacion);
+        if (marca == null || marca.isBlank()) {
+            throw new IllegalArgumentException("La marca no puede estar vacía");
+        }
+        if (pulgadas <= 0) {
+            throw new IllegalArgumentException("Las pulgadas deben ser mayores que cero");
+        }
         this.marca = marca;
         this.pulgadas = pulgadas;
     }
@@ -14,25 +20,13 @@ public class Tableta extends Recurso {
         return marca;
     }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
     public int getPulgadas() {
         return pulgadas;
     }
 
-    public void setPulgadas(int pulgadas) {
-        this.pulgadas = pulgadas;
-    }
-
     @Override
-    public void mostrarDetalles() {
-        System.out.println("Tablet - ID: " + id +
-                           ", Nombre: " + nombre +
-                           ", Ubicación: " + ubicacion +
-                           ", Disponible: " + disponible +
-                           ", Marca: " + marca +
-                           ", Pulgadas: " + pulgadas);
+    public String toString() {
+        return super.toString() + String.format(", marca=%s, pulgadas=%d", marca, pulgadas);
     }
 }
+

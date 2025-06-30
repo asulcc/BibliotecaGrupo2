@@ -1,19 +1,32 @@
 package modelos.recursos;
 
 public abstract class Recurso {
-    protected int id;
-    protected String nombre;
-    protected String ubicacion;
-    protected boolean disponible;
+    private final String id;            // Identificador alfanumérico único
+    private final String nombre;        // Nombre legible del recurso
+    private String ubicacion;           // Ubicación actual
+    private boolean disponible = true;  // true = libre, false = prestado
 
-    public Recurso(int id, String nombre, String ubicacion) {
+    /**
+     * Constructor de Recurso.
+     * @param id Identificador alfanumérico (solo letras y números, sin espacios)
+     */
+    public Recurso(String id, String nombre, String ubicacion) {
+        if (id == null || !id.matches("[A-Za-z0-9]+")) {
+            throw new IllegalArgumentException("El id debe ser alfanumérico (letras y números, sin espacios)");
+        }
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío");
+        }
+        if (ubicacion == null || ubicacion.isBlank()) {
+            throw new IllegalArgumentException("La ubicación no puede estar vacía");
+        }
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
-        this.disponible = true;
     }
 
-    public int getId() {
+    // ---------- GETTERS ----------
+    public String getId() {
         return id;
     }
 
@@ -25,25 +38,29 @@ public abstract class Recurso {
         return ubicacion;
     }
 
-    public boolean isDisponible() {
+    public boolean getDisponible() {
         return disponible;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    // ---------- COMPORTAMIENTO ----------
+    public void moverA(String nuevaUbicacion) {
+        if (nuevaUbicacion == null || nuevaUbicacion.isBlank()) {
+            throw new IllegalArgumentException("La nueva ubicación no puede estar vacía");
+        }
+        this.ubicacion = nuevaUbicacion;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void marcarPrestado() {
+        disponible = false;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void marcarDevuelto() {
+        disponible = true;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    @Override
+    public String toString() {
+        return String.format("%s[id=%s, nombre=%s, ubicacion=%s, disponible=%b]",
+                             getClass().getSimpleName(), id, nombre, ubicacion, disponible);
     }
-
-    public abstract void mostrarDetalles();
 }
