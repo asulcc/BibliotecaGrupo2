@@ -2,7 +2,9 @@ package servicios;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class BaseDatos {
     private static final String DB_URL = "jdbc:sqlite:./db/biblioteca.db";
@@ -37,5 +39,18 @@ public class BaseDatos {
                 System.err.println("Error al cerrar la conexión a la base de datos: " + e.getMessage());
             }
         }
+    }
+    
+    // Método para obtener el siguiente ID disponible en la base de datos.
+    public int getNextId(String tableName) {
+        String sql = "SELECT MAX(id) FROM " + tableName + ";";
+        try (Connection conn = getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener el siguiente ID para la tabla " + tableName + ": " + e.getMessage());
+        }
+        return 1; 
     }
 }
