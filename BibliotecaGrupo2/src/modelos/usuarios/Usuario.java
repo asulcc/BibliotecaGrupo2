@@ -1,35 +1,74 @@
 package modelos.usuarios;
-import java.util.List;
+
+
 public abstract class Usuario {
-    protected String idUsuario;
+    public enum Rol {
+        ADMINISTRADOR,
+        BIBLIOTECARIO,
+        PROFESOR,
+        ALUMNO
+    }
+    protected int id;
     protected String nombreUsuario;
     protected String contrasena;
     protected String nombreCompleto;
     protected String email;
-    protected List<String> rol;  
     protected boolean activo;
-    public Usuario(String idUsuario, String nombreUsuario, String contrasena, 
-                   String nombreCompleto, String email, List<String> rol) {
-        this.idUsuario = idUsuario;
+    protected Rol rol;
+
+    public Usuario(int id, String nombreUsuario, String contrasena, String nombreCompleto, String email, Rol rol) {
+        this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
         this.nombreCompleto = nombreCompleto;
         this.email = email;
         this.rol = rol;
         this.activo = true; 
+
     }
-    public abstract String getIdUsuario();
-    public abstract String getNombreUsuario();
-    public abstract String getContrasena();
-    public abstract String getNombreCompleto();
-    public abstract String getEmail();
-    public abstract List<String> getRol();
-    public abstract boolean isActivo();
-    public abstract void setIdUsuario(String idUsuario);
-    public abstract void setNombreUsuario(String nombreUsuario);
-    public abstract void setContrasena(String contrasena);
-    public abstract void setNombreCompleto(String nombreCompleto);
-    public abstract void setEmail(String email);
-    public abstract void setRol(List<String> rol);
-    public abstract void setActivo(boolean activo);
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public void setemail(String email) {
+        this.email = email;
+    }
+
+    // Método abstracto que debe ser implementado por las subclases
+    public abstract void mostrarInformacion();
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Usuario: " + nombreUsuario + ", Rol: " + rol.name() + ", Nombre: " + nombreCompleto;
+    }
 }
