@@ -1,4 +1,5 @@
 package modelos.usuarios;
+
 public class Alumno extends Usuario {
     private String carrera;
     private String codigoUniversitario;
@@ -20,6 +21,7 @@ public class Alumno extends Usuario {
     public void setCodigoUniversitario(String codigoUniversitario) {
         this.codigoUniversitario = codigoUniversitario;
     }
+    
     @Override
     public void mostrarInformacion() {
         System.out.println("--- Información del Alumno ---");

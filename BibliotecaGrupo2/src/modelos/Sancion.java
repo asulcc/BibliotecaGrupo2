@@ -1,43 +1,75 @@
 package modelos;
 
+import modelos.usuarios.Usuario;
+import modelos.materiales.PrestamoMaterial;
 import java.time.LocalDate;
 
 public class Sancion {
     private int id;
-    private Usuario usuario;
-    private PrestamoMaterial prestamo;
-    private LocalDate fechaSancion;
-    private LocalDate finalSancion;
+    private Usuario usuarioSancionado;
+    private PrestamoMaterial prestamoAsociado; // Puede ser null si la sanción no es por un préstamo
     private String descripcion;
-    private boolean estaActiva;
-    private int diasRetraso;
-    private double montoMulta;
-//constructor
-    public Sancion(int id, Usuario usuario, PrestamoMaterial prestamo, LocalDate fechaSancion,
-                   int diasRetraso, double montoMulta) {
+    private LocalDate fechaSancion;
+    private LocalDate fechaFinSancion;
+    private boolean activa;
+
+    public Sancion(int id, Usuario usuarioSancionado, PrestamoMaterial prestamoAsociado, String descripcion, LocalDate fechaSancion, LocalDate fechaFinSancion) {
         this.id = id;
-        this.usuario = usuario;
-        this.prestamo = prestamo;
+        this.usuarioSancionado = usuarioSancionado;
+        this.prestamoAsociado = prestamoAsociado;
+        this.descripcion = descripcion;
         this.fechaSancion = fechaSancion;
-        this.diasRetraso = diasRetraso;
-        this.montoMulta = montoMulta;
-        this.finalSancion = fechaSancion.plusDays(diasRetraso);
-        this.estaActiva = true; //inicia como true automaticamente cuando hay una sancion
+        this.fechaFinSancion = fechaFinSancion;
+        this.activa = true; // Por defecto, la sanción está activa al crearse
     }
-//geters
-    public int getId() { return id; }
-    public Usuario getUsuario() { return usuario; }
-    public PrestamoMaterial getPrestamo() { return prestamo; }
-    public LocalDate getFechaSancion() { return fechaSancion; }
-    public LocalDate getFinalSancion() { return finalSancion; }
-    public String getDescripcion() { return descripcion; }
-    public boolean isEstaActiva() { return estaActiva; }
-//seters
-    public void setId(int id) { this.id = id; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
-    public void setPrestamo(PrestamoMaterial prestamo) { this.prestamo = prestamo; }
-    public void setFechaSancion(LocalDate fechaSancion) { this.fechaSancion = fechaSancion; }
-    public void setFinalSancion(LocalDate finalSancion) { this.finalSancion = finalSancion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public void setEstaActiva(boolean estaActiva) { this.estaActiva = estaActiva; }
+
+    // Getters
+    public int getId() {
+        return id;
+    }
+
+    public Usuario getUsuarioSancionado() {
+        return usuarioSancionado;
+    }
+
+    public PrestamoMaterial getPrestamoAsociado() {
+        return prestamoAsociado;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public LocalDate getFechaSancion() {
+        return fechaSancion;
+    }
+
+    public LocalDate getFechaFinSancion() {
+        return fechaFinSancion;
+    }
+
+    public boolean isActiva() {
+        return activa;
+    }
+
+    // Setter
+    public void setActiva(boolean activa) {
+        this.activa = activa;
+    }
+
+    public boolean estaVigente() {
+        return activa && LocalDate.now().isBefore(fechaFinSancion.plusDays(1)); // plusDays(1) para incluir el día de fin
+    }
+
+    @Override
+    public String toString() {
+        String prestamoInfo = (prestamoAsociado != null) ? " (Préstamo ID: " + prestamoAsociado.getId() + ")" : "";
+        return "Sanción ID: " + id +
+               "\n  Usuario: " + usuarioSancionado.getNombreCompleto() +
+               prestamoInfo +
+               "\n  Descripción: " + descripcion +
+               "\n  Fecha Inicio: " + fechaSancion +
+               "\n  Fecha Fin: " + fechaFinSancion +
+               "\n  Estado: " + (activa ? "Activa" : "Inactiva");
+    }
 }

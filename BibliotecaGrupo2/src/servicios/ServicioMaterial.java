@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import modelos.materiales.Audiovisual;
-import modelos.materiales.CategoriaMaterial;
 import modelos.materiales.Libro;
 import modelos.materiales.Material;
+import modelos.materiales.Material.CategoriaMaterial;
 import modelos.materiales.Revista;
 import modelos.materiales.Tesis;
 
@@ -76,7 +76,7 @@ public class ServicioMaterial {
                 pstmt.setNull(18, java.sql.Types.VARCHAR);
                 pstmt.setNull(19, java.sql.Types.VARCHAR);
                 pstmt.setInt(20, revista.getVolumen());
-                pstmt.setInt(21, revista.getNumero());
+                pstmt.setInt(21, revista.getNumeroEdicion());
                 pstmt.setString(22, revista.getFechaPublicacion());
             } else if (material instanceof Tesis) {
                 Tesis tesis = (Tesis) material;
@@ -342,7 +342,7 @@ public class ServicioMaterial {
                 case "REVISTA":
                     Revista revista = (Revista) material;
                     volumen = revista.getVolumen();
-                    numero = revista.getNumero();
+                    numero = revista.getNumeroEdicion();
                     fechaPublicacion = revista.getFechaPublicacion();
                     break;
                 case "TESIS":

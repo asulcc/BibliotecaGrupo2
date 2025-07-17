@@ -10,6 +10,11 @@ import modelos.usuarios.Alumno;
 import modelos.usuarios.Bibliotecario;
 import modelos.usuarios.Profesor;
 import modelos.usuarios.Usuario;
+import modelos.usuarios.Usuario.Rol;
+import static modelos.usuarios.Usuario.Rol.ADMINISTRADOR;
+import static modelos.usuarios.Usuario.Rol.ALUMNO;
+import static modelos.usuarios.Usuario.Rol.BIBLIOTECARIO;
+import static modelos.usuarios.Usuario.Rol.PROFESOR;
 
 public class ServicioAutenticacion {
     private final BaseDatos dbManager;

@@ -1,11 +1,11 @@
-package recursos;
+package modelos.recursos;
 
 public class Tableta extends Recurso {
     private String marca;
     private String modelo;
 
-    public Tableta(int id, String codigo, String ubicacion, String marca, String modelo) {
-        super(id, codigo, ubicacion);
+    public Tableta(int id, String codigo, String ubicacion, TipoRecurso tipo, String marca, String modelo) {
+        super(id, codigo, ubicacion, tipo.TABLETA);
         this.marca = marca;
         this.modelo = modelo;
     }

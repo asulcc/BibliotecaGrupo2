@@ -7,6 +7,7 @@ import modelos.Sancion;
 import modelos.materiales.Audiovisual;
 import modelos.materiales.Libro;
 import modelos.materiales.Material;
+import modelos.materiales.Material.CategoriaMaterial;
 import modelos.materiales.PrestamoMaterial;
 import modelos.materiales.Revista;
 import modelos.materiales.Tesis;
@@ -16,6 +17,7 @@ import modelos.recursos.ReservaRecurso;
 import modelos.recursos.SalaEstudio;
 import modelos.recursos.Tableta;
 import modelos.usuarios.Usuario;
+import modelos.usuarios.Usuario.Rol;
 import servicios.BaseDatos;
 import servicios.ServicioAutenticacion;
 import servicios.ServicioMaterial;
@@ -204,11 +206,7 @@ public class Main {
         scanner.nextLine();
     }
     
-    /**
-    * Métodos para la Gestión de Materiales (CRUD)
-    * Materiales, libros, revistas, tesis, audiovisuales
-    */
-    // Menu de materiales
+// --- Métodos de Gestión de Materiales (CRUD) ---
     private void menuGestionMateriales() {
         int opcion;
         do {
@@ -246,8 +244,7 @@ public class Main {
             }
         } while (opcion != 0);
     }
-    
-    // Método para añadir materiales nuevos al sistema
+
     private void addMaterial() {
         System.out.println("\n--- AGREGAR MATERIAL ---");
         System.out.print("Título: ");
@@ -276,8 +273,7 @@ public class Main {
         String tipoMaterial;
                 
         Material nuevoMaterial = null;
-        // Obtener el siguiente ID disponible
-        int nuevoId = dbManager.getNextId("Materiales"); 
+        int nuevoId = dbManager.getNextId("Materiales"); // Obtener el siguiente ID disponible
 
         switch (tipo) {
             case 1: // Libro
@@ -338,7 +334,6 @@ public class Main {
         }
     }
 
-    // Método para mostrar todos los materiales del sistema
     private void viewAllMateriales() {
         System.out.println("\n--- TODOS LOS MATERIALES ---");
         List<Material> materiales = materialService.getAllMateriales();
@@ -351,7 +346,6 @@ public class Main {
         scanner.nextLine();
     }
 
-    // Método para buscar materiales
     private void searchMateriales() {
         System.out.println("\n--- BUSCAR MATERIALES ---");
         System.out.println("Buscar por:");
@@ -361,6 +355,7 @@ public class Main {
         System.out.println("4. Categoría");
         System.out.print("Seleccione una opción: ");
         int opcion = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
 
         String tipoBusqueda;
         switch (opcion) {
@@ -395,11 +390,11 @@ public class Main {
         scanner.nextLine();
     }
 
-    // Método para Actualizar información de material por el ID
     private void updateMaterial() {
         System.out.println("\n--- ACTUALIZAR MATERIAL ---");
         System.out.print("Ingrese el ID del material a actualizar: ");
         int id = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
 
         Material material = materialService.getMaterialById(id);
         if (material == null) {
@@ -450,35 +445,30 @@ public class Main {
         if (!cantTotalStr.isEmpty()) {
             try {
                 int nuevaCantidadTotal = Integer.parseInt(cantTotalStr);
-                // No se puede bajar el total por debajo de la cantidad disponible
-                if (nuevaCantidadTotal >= material.getCantidadDisponible()) { 
+                if (nuevaCantidadTotal >= material.getCantidadDisponible()) { // No se puede bajar la total por debajo de la disponible
                     material.setCantidadTotal(nuevaCantidadTotal);
                 } else {
-                    System.out.println("Advertencia: La nueva cantidad total no puede "
-                            + "ser menor que la cantidad disponible actual.");
+                    System.out.println("Advertencia: La nueva cantidad total no puede ser menor que la cantidad disponible actual.");
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Cantidad total inválida. Se mantiene la anterior.");
             }
         }
-        
+        // La cantidad disponible se ajusta automáticamente si se modifica la total.
+        // Si se necesita ajustar la disponible directamente, habría que añadir un campo también.
+
         materialService.updateMaterial(material);
     }
 
-    // Método para eliminar un material
     private void deleteMaterial() {
         System.out.println("\n--- ELIMINAR MATERIAL ---");
         System.out.print("Ingrese el ID del material a eliminar: ");
         int id = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
         materialService.deleteMaterial(id);
     }
-    
-    
-    /**
-    * Métodos para la Gestión de Recursos (CRUD)
-    * Pcs, Laptops, Salas de estudio
-    */
-    // Menu de Recursos
+
+    // --- Métodos de Gestión de Recursos (CRUD) ---
     private void menuGestionRecursos() {
         int opcion;
         do {
@@ -513,7 +503,6 @@ public class Main {
         } while (opcion != 0);
     }
 
-    // Método para añadir un nuevo recurso
     private void addRecurso() {
         System.out.println("\n--- AGREGAR RECURSO ---");
         System.out.println("Seleccione tipo de recurso:");
@@ -529,8 +518,7 @@ public class Main {
         String ubicacion = scanner.nextLine();
 
         Recurso nuevoRecurso = null;
-        // Obtener el siguiente ID disponible
-        int nuevoId = dbManager.getNextId("Recursos"); 
+        int nuevoId = dbManager.getNextId("Recursos"); // Obtener el siguiente ID disponible
 
         switch (tipo) {
             case 1: // PC
@@ -567,7 +555,6 @@ public class Main {
         }
     }
 
-    // Método para mostrar todos los recursos
     private void viewAllRecursos() {
         System.out.println("\n--- TODOS LOS RECURSOS ---");
         List<Recurso> recursos = recursoService.getAllRecursos();
@@ -580,11 +567,11 @@ public class Main {
         scanner.nextLine();
     }
 
-    // Método para actualizar datos de un recurso
     private void updateRecurso() {
         System.out.println("\n--- ACTUALIZAR RECURSO ---");
         System.out.print("Ingrese el ID del recurso a actualizar: ");
         int id = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
 
         Recurso recurso = recursoService.getRecursoById(id);
         if (recurso == null) {
@@ -651,23 +638,293 @@ public class Main {
         recursoService.updateRecurso(recurso);
     }
 
-    // Método para Eliminar un recurso
     private void deleteRecurso() {
         System.out.println("\n--- ELIMINAR RECURSO ---");
         System.out.print("Ingrese el ID del recurso a eliminar: ");
         int id = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
         recursoService.deleteRecurso(id);
     }
 
-    
-    /**
-    * Métodos para la Gestión de Recursos (CRUD)
-    * Pcs, Laptops, Salas de estudio
-    */
-    
-    
-    
-    // --- Métodos de Utilidad para Recibir un enterp por teclado ---
+    // --- Métodos de Gestión de Préstamos y Reservas ---
+    private void menuGestionPrestamosReservas() {
+        int opcion;
+        do {
+            System.out.println("\n--- GESTIÓN DE PRÉSTAMOS Y RESERVAS ---");
+            System.out.println("1. Realizar Préstamo de Material");
+            System.out.println("2. Registrar Devolución de Material");
+            System.out.println("3. Extender Préstamo de Material");
+            System.out.println("4. Realizar Reserva de Recurso");
+            System.out.println("5. Liberar Reserva de Recurso");
+            System.out.println("6. Extender Reserva de Recurso");
+            System.out.println("7. Ver Todos los Préstamos de Material");
+            System.out.println("8. Ver Todas las Reservas de Recurso");
+            System.out.println("0. Volver al Menú Principal");
+            System.out.print("Seleccione una opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1:
+                    realizarPrestamoMaterial();
+                    break;
+                case 2:
+                    registrarDevolucionMaterial();
+                    break;
+                case 3:
+                    extenderPrestamoMaterial();
+                    break;
+                case 4:
+                    realizarReservaRecurso();
+                    break;
+                case 5:
+                    liberarReservaRecurso();
+                    break;
+                case 6:
+                    extenderReservaRecurso();
+                    break;
+                case 7:
+                    verTodosLosPrestamosMaterial();
+                    break;
+                case 8:
+                    verTodasLasReservasRecurso();
+                    break;
+                case 0:
+                    System.out.println("Volviendo...");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
+    }
+
+    private void realizarPrestamoMaterial() {
+        System.out.println("\n--- REALIZAR PRÉSTAMO DE MATERIAL ---");
+        System.out.print("Ingrese el ID del usuario: ");
+        int idUsuario = leerEntero();
+//        scanner.nextLine(); // Consumir nueva línea
+        Usuario usuario = sancionService.getUsuarioById(idUsuario); // Reutilizamos el método de SancionService
+        if (usuario == null) {
+            System.out.println("Usuario no encontrado.");
+            return;
+        }
+
+        System.out.print("Ingrese el ID del material: ");
+        int idMaterial = leerEntero();
+//        scanner.nextLine(); // Consumir nueva línea
+        Material material = materialService.getMaterialById(idMaterial);
+        if (material == null) {
+            System.out.println("Material no encontrado.");
+            return;
+        }
+
+        System.out.print("¿Es una reserva (s/n)? ");
+        boolean esReserva = scanner.nextLine().equalsIgnoreCase("s");
+
+        prestamoService.prestarMaterial(usuario, material, esReserva);
+    }
+
+    private void registrarDevolucionMaterial() {
+        System.out.println("\n--- REGISTRAR DEVOLUCIÓN DE MATERIAL ---");
+        System.out.print("Ingrese el ID del préstamo a devolver: ");
+        int idPrestamo = leerEntero();
+//        scanner.nextLine(); // Consumir nueva línea
+
+        PrestamoMaterial prestamo = prestamoService.getPrestamoMaterialById(idPrestamo);
+        if (prestamo == null) {
+            System.out.println("Préstamo no encontrado con ID: " + idPrestamo);
+            return;
+        }
+
+        prestamoService.devolverMaterial(prestamo);
+    }
+
+    private void extenderPrestamoMaterial() {
+        System.out.println("\n--- EXTENDER PRÉSTAMO DE MATERIAL ---");
+        System.out.print("Ingrese el ID del préstamo a extender: ");
+        int idPrestamo = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+
+        PrestamoMaterial prestamo = prestamoService.getPrestamoMaterialById(idPrestamo);
+        if (prestamo == null) {
+            System.out.println("Préstamo no encontrado con ID: " + idPrestamo);
+            return;
+        }
+
+        if (prestamo.isActivo() && !prestamo.estaVencido()) {
+            prestamoService.extenderPrestamoMaterial(prestamo);
+        } else {
+            System.out.println("El préstamo no está activo o ya está vencido, no se puede extender.");
+        }
+    }
+
+    private void realizarReservaRecurso() {
+        System.out.println("\n--- REALIZAR RESERVA DE RECURSO ---");
+        System.out.print("Ingrese el ID del usuario: ");
+        int idUsuario = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+        Usuario usuario = sancionService.getUsuarioById(idUsuario);
+        if (usuario == null) {
+            System.out.println("Usuario no encontrado.");
+            return;
+        }
+
+        System.out.print("Ingrese el ID del recurso: ");
+        int idRecurso = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+        Recurso recurso = recursoService.getRecursoById(idRecurso);
+        if (recurso == null) {
+            System.out.println("Recurso no encontrado.");
+            return;
+        }
+
+        LocalDateTime fechaHoraInicio = leerFechaHora("Fecha y Hora de Inicio (YYYY-MM-DD HH:MM): ");
+        if (fechaHoraInicio == null) {
+            return;
+        }
+        LocalDateTime fechaHoraFin = leerFechaHora("Fecha y Hora de Fin (YYYY-MM-DD HH:MM): ");
+        if (fechaHoraFin == null) {
+            return;
+        }
+
+        int participantes = 0;
+        if (recurso instanceof SalaEstudio) {
+            System.out.print("Número de participantes (3-5): ");
+            participantes = leerEntero();
+            scanner.nextLine();
+        }
+
+        prestamoService.reservarRecurso(usuario, recurso, fechaHoraInicio, fechaHoraFin, participantes);
+    }
+
+    private void liberarReservaRecurso() {
+        System.out.println("\n--- LIBERAR RESERVA DE RECURSO ---");
+        System.out.print("Ingrese el ID de la reserva a liberar: ");
+        int idReserva = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+
+        ReservaRecurso reserva = prestamoService.getReservaRecursoById(idReserva);
+        if (reserva == null) {
+            System.out.println("Reserva no encontrada con ID: " + idReserva);
+            return;
+        }
+
+        prestamoService.liberarRecurso(reserva);
+    }
+
+    private void extenderReservaRecurso() {
+        System.out.println("\n--- EXTENDER RESERVA DE RECURSO ---");
+        System.out.print("Ingrese el ID de la reserva a extender: ");
+        int idReserva = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+
+        ReservaRecurso reserva = prestamoService.getReservaRecursoById(idReserva);
+        if (reserva == null) {
+            System.out.println("Reserva no encontrada con ID: " + idReserva);
+            return;
+        }
+
+        if (reserva.isActivo() && !reserva.estaVencido()) {
+            System.out.println("Fecha y hora de fin actual: " + reserva.getFechaHoraFin().format(java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")));
+            LocalDateTime nuevaFechaFin = leerFechaHora("Nueva Fecha y Hora de Fin (YYYY-MM-DD HH:MM): ");
+            if (nuevaFechaFin == null) {
+                return;
+            }
+
+            prestamoService.extenderReservaRecurso(reserva, nuevaFechaFin);
+        } else {
+            System.out.println("La reserva no está activa o ya está vencida, no se puede extender.");
+        }
+    }
+
+    private void verTodosLosPrestamosMaterial() {
+        System.out.println("\n--- TODOS LOS PRÉSTAMOS DE MATERIAL ---");
+        List<PrestamoMaterial> prestamos = prestamoService.getAllPrestamosMaterial();
+        if (prestamos.isEmpty()) {
+            System.out.println("No hay préstamos de materiales registrados.");
+        } else {
+            prestamos.forEach(System.out::println);
+        }
+        System.out.println("Presione Enter para continuar...");
+        scanner.nextLine();
+    }
+
+    private void verTodasLasReservasRecurso() {
+        System.out.println("\n--- TODAS LAS RESERVAS DE RECURSO ---");
+        List<ReservaRecurso> reservas = prestamoService.getAllReservasRecurso();
+        if (reservas.isEmpty()) {
+            System.out.println("No hay reservas de recursos registradas.");
+        } else {
+            reservas.forEach(System.out::println);
+        }
+        System.out.println("Presione Enter para continuar...");
+        scanner.nextLine();
+    }
+
+    // --- Métodos de Gestión de Sanciones ---
+    private void menuGestionSanciones() {
+        int opcion;
+        do {
+            System.out.println("\n--- GESTIÓN DE SANCIONES ---");
+            System.out.println("1. Ver Sanciones por Usuario");
+            System.out.println("2. Levantar Sanción");
+            System.out.println("0. Volver al Menú Principal");
+            System.out.print("Seleccione una opción: ");
+            opcion = leerEntero();
+
+            switch (opcion) {
+                case 1:
+                    verSancionesPorUsuario();
+                    break;
+                case 2:
+                    levantarSancion();
+                    break;
+                case 0:
+                    System.out.println("Volviendo...");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
+            }
+        } while (opcion != 0);
+    }
+
+    private void verSancionesPorUsuario() {
+        System.out.println("\n--- VER SANCIONES POR USUARIO ---");
+        System.out.print("Ingrese el ID del usuario: ");
+        int idUsuario = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+
+        Usuario usuario = sancionService.getUsuarioById(idUsuario);
+        if (usuario == null) {
+            System.out.println("Usuario no encontrado.");
+            return;
+        }
+
+        System.out.println("\n--- SANCIONES PARA: " + usuario.getNombreCompleto() + " ---");
+        List<Sancion> sanciones = sancionService.getSancionesPorUsuario(usuario);
+        if (sanciones.isEmpty()) {
+            System.out.println("El usuario " + usuario.getNombreCompleto() + " no tiene sanciones registradas.");
+        } else {
+            sanciones.forEach(System.out::println);
+            if (sancionService.usuarioEstaSancionado(usuario)) {
+                System.out.println("\nEl usuario " + usuario.getNombreCompleto() + " ESTÁ SANCIONADO actualmente.");
+            } else {
+                System.out.println("\nEl usuario " + usuario.getNombreCompleto() + " NO ESTÁ SANCIONADO actualmente.");
+            }
+        }
+        System.out.println("Presione Enter para continuar...");
+        scanner.nextLine();
+    }
+
+    private void levantarSancion() {
+        System.out.println("\n--- LEVANTAR SANCIÓN ---");
+        System.out.print("Ingrese el ID de la sanción a levantar: ");
+        int idSancion = leerEntero();
+        scanner.nextLine(); // Consumir nueva línea
+
+        sancionService.levantarSancion(idSancion);
+    }
+
+    // --- Métodos de Utilidad para la UI ---
     private int leerEntero() {
         while (true) {
             try {
@@ -680,7 +937,36 @@ public class Main {
             }
         }
     }
-    
+
+    private LocalDateTime leerFechaHora(String mensaje) {
+        System.out.print(mensaje + " ");
+        String fechaHoraStr = scanner.nextLine();
+        try {
+            return LocalDateTime.parse(fechaHoraStr, java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        } catch (DateTimeParseException e) {
+            System.out.println("Formato de fecha y hora inválido. Use YYYY-MM-DD HH:MM.");
+            return null;
+        }
+    }
+
+    private CategoriaMaterial seleccionarCategoriaMaterial() {
+        System.out.println("Seleccione Categoría de Material:");
+        CategoriaMaterial[] categorias = CategoriaMaterial.values();
+        for (int i = 0; i < categorias.length; i++) {
+            System.out.println((i + 1) + ". " + categorias[i].name());
+        }
+        while (true) {
+            System.out.print("Opción: ");
+            int opcion = leerEntero();
+            if (opcion > 0 && opcion <= categorias.length) {
+                return categorias[opcion - 1];
+            } else {
+                System.out.println("Opción inválida. Intente de nuevo.");
+            }
+        }
+    }
+
+    // Método principal para ejecutar la aplicación
     public static void main(String[] args) {
         Main ui = new Main();
         ui.start();

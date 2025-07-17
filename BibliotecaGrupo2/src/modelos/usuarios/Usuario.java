@@ -40,6 +40,8 @@ public abstract class Usuario {
     public Rol getRol() {
         return rol;
     }
+    
+    // Setter
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
@@ -49,11 +51,8 @@ public abstract class Usuario {
     public void setemail(String email) {
         this.email = email;
     }
+    
     // Método abstracto que debe ser implementado por las subclases
     public abstract void mostrarInformacion();
-    @Override
-    public String toString() {
-        return "ID: " + id + ", Usuario: " + nombreUsuario + ", Rol: " + rol.name() + ", Nombre: " + nombreCompleto;
-    }
 }
 

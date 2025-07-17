@@ -1,10 +1,11 @@
-package recursos;
+package modelos.recursos;
+
 public class PC extends Recurso {
- private String sistemaOperativo;
+    private String sistemaOperativo;
     private String especificaciones; // Ej: "Core i7, 16GB RAM, SSD 512GB"
 
-    public PC(int id, String codigo, String ubicacion, String sistemaOperativo, String especificaciones) {
-        super(id, codigo, ubicacion);
+    public PC(int id, String codigo, String ubicacion, TipoRecurso tipo, String sistemaOperativo, String especificaciones) {
+        super(id, codigo, ubicacion, tipo.PC);
         this.sistemaOperativo = sistemaOperativo;
         this.especificaciones = especificaciones;
     }

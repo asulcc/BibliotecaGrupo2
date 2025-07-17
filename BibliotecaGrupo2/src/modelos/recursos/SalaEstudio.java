@@ -1,11 +1,11 @@
-package recursos;
+package modelos.recursos;
 
 public class SalaEstudio extends Recurso {
     private int capacidadMaxima;
     private int capacidadActual; // Número de participantes actualmente en la sala (o reservados para el mismo bloque)
 
-    public SalaEstudio(int id, String codigo, String ubicacion, int capacidadMaxima) {
-        super(id, codigo, ubicacion);
+    public SalaEstudio(int id, String codigo, String ubicacion, TipoRecurso tipo, int capacidadMaxima) {
+        super(id, codigo, ubicacion, tipo.SALAESTUDIO);
         if (capacidadMaxima < 3 || capacidadMaxima > 5) {
             throw new IllegalArgumentException("La capacidad máxima de una sala de estudio debe ser entre 3 y 5 participantes.");
         }
@@ -38,11 +38,7 @@ public class SalaEstudio extends Recurso {
         }
     }
 
-    /**
-     * Verifica si la sala puede ser reservada para un número específico de participantes.
-     * @param numParticipantes El número de participantes para la reserva.
-     * @return true si la sala puede acomodar ese número de participantes, false en caso contrario.
-     */
+    
     public boolean puedeReservar(int numParticipantes) {
         return isDisponible() && numParticipantes >= 3 && numParticipantes <= capacidadMaxima;
     }

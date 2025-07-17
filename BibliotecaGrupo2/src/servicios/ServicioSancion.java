@@ -7,7 +7,6 @@ import modelos.usuarios.Administrador;
 import modelos.usuarios.Bibliotecario;
 import modelos.usuarios.Profesor;
 import modelos.usuarios.Alumno;
-import modelos.usuarios.Rol;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +15,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import modelos.usuarios.Usuario.Rol;
+import static modelos.usuarios.Usuario.Rol.ADMINISTRADOR;
+import static modelos.usuarios.Usuario.Rol.ALUMNO;
+import static modelos.usuarios.Usuario.Rol.BIBLIOTECARIO;
+import static modelos.usuarios.Usuario.Rol.PROFESOR;
 
 
 public class ServicioSancion {
