@@ -1,4 +1,5 @@
 package modelos.usuarios;
+<<<<<<< HEAD
 import java.util.List;
 public class Alumno {
     private int id;
@@ -41,4 +42,9 @@ public class Alumno {
     public List<String> getPermisos() {
         return permisos;
     }
+=======
+
+public class Alumno 
+    
+>>>>>>> Patrick-Jove
 }
