@@ -1,44 +1,25 @@
 package modelos.usuarios;
-import java.util.List;
-public class Administrador {
-    private int id;
-    private String nombreUsuario;
-    private String contrasena;
-    private String nombreCompleto;
-    private List<String> permisos;
-    public Administrador(int id, String nombreUsuario, String contrasena, String nombreCompleto) {
-        this.id = id;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-        this.nombreCompleto = nombreCompleto;
+public class Administrador extends Usuario{
+    public Administrador(int id, String nombreUsuario, String contrasena, String nombreCompleto, String email) {
+        super(id, nombreUsuario, contrasena, nombreCompleto, email, Rol.ADMINISTRADOR);
     }
-    public boolean tienePermiso(String permiso) {
-        return permisos != null && permisos.contains(permiso);
-    }
+    // Métodos específicos del Administrador
     public void gestionarUsuarios() {
-        System.out.println("Gestionando usuarios...");
+        System.out.println("Administrador " + nombreCompleto + " gestionando usuarios del sistema.");
+        // Lógica para CRUD de usuarios
     }
+    public void generarReportes() {
+        System.out.println("Administrador " + nombreCompleto + " generando reportes del sistema.");
+        // Lógica para generar reportes
+    }
+    @Override
     public void mostrarInformacion() {
-        System.out.println("ID: " + id);
-        System.out.println("Usuario: " + nombreUsuario);
-        System.out.println("Nombre completo: " + nombreCompleto);
-    }
-    public boolean autenticar(String contrasena) {
-        return this.contrasena.equals(contrasena);
-    }
-    public int getId() {
-        return id;
-    }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-    public void setPermisos(List<String> permisos) {
-        this.permisos = permisos;
-    }
-    public List<String> getPermisos() {
-        return permisos;
+        System.out.println("--- Información del Administrador ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre de Usuario: " + getNombreUsuario());
+        System.out.println("Nombre Completo: " + getNombreCompleto());
+        System.out.println("Correo Electrónico: " + getEmail());
+        System.out.println("Rol: " + getRol().name());
+        System.out.println("------------------------------------");
     }
 }

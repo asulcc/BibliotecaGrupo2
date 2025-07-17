@@ -1,50 +1,35 @@
 package modelos.usuarios;
-<<<<<<< HEAD
-import java.util.List;
-public class Alumno {
-    private int id;
-    private String nombreUsuario;
-    private String contrasena;
-    private String nombreCompleto;
+public class Alumno extends Usuario {
     private String carrera;
-    private List<String> permisos;
-    public Alumno(int id, String nombreUsuario, String contrasena, String nombreCompleto, String carrera) {
-        this.id = id;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-        this.nombreCompleto = nombreCompleto;
+    private String codigoUniversitario;
+    public Alumno(int id, String nombreUsuario, String contrasena, String nombreCompleto, String email, String carrera, String codigoUniversitario) {
+        super(id, nombreUsuario, contrasena, nombreCompleto, email, Rol.ALUMNO);
         this.carrera = carrera;
+        this.codigoUniversitario = codigoUniversitario;
     }
+    // Getters y Setters específicos
     public String getCarrera() {
         return carrera;
     }
     public void setCarrera(String carrera) {
         this.carrera = carrera;
     }
-    public boolean tienePermiso(String permiso) {
-        return permisos != null && permisos.contains(permiso);
+    public String getCodigoUniversitario() {
+        return codigoUniversitario;
     }
-    public boolean autenticar(String contrasena) {
-        return this.contrasena.equals(contrasena);
+    public void setCodigoUniversitario(String codigoUniversitario) {
+        this.codigoUniversitario = codigoUniversitario;
     }
-    public int getId() {
-        return id;
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("--- Información del Alumno ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre de Usuario: " + getNombreUsuario());
+        System.out.println("Nombre Completo: " + getNombreCompleto());
+        System.out.println("Correo Electrónico: " + getEmail());
+        System.out.println("Rol: " + getRol().name());
+        System.out.println("Carrera: " + getCarrera());
+        System.out.println("Código Universitario: " + getCodigoUniversitario());
+        System.out.println("------------------------------");
     }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-    public void setPermisos(List<String> permisos) {
-        this.permisos = permisos;
-    }
-    public List<String> getPermisos() {
-        return permisos;
-    }
-=======
-
-public class Alumno 
-    
->>>>>>> Patrick-Jove
 }

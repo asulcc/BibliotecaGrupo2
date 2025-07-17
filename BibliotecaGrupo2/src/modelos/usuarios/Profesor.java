@@ -1,45 +1,27 @@
 package modelos.usuarios;
-import java.util.List;
-public class Profesor {
-    private int id;
-    private String nombreUsuario;
-    private String contrasena;
-    private String nombreCompleto;
+
+public class Profesor extends Usuario {
     private String departamento;
-    private List<String> permisos;
-    public Profesor(int id, String nombreUsuario, String contrasena, String nombreCompleto, String departamento) {
-        this.id = id;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
-        this.nombreCompleto = nombreCompleto;
+    public Profesor(int id, String nombreUsuario, String contrasena, String nombreCompleto, String email, String departamento) {
+        super(id, nombreUsuario, contrasena, nombreCompleto, email, Rol.PROFESOR);
         this.departamento = departamento;
     }
+    // Getter y Setter específico
     public String getDepartamento() {
         return departamento;
     }
     public void setDepartamento(String departamento) {
         this.departamento = departamento;
     }
-    public boolean tienePermiso(String permiso) {
-        return permisos != null && permisos.contains(permiso);
-    }
-    public boolean autenticar(String contrasena) {
-        return this.contrasena.equals(contrasena);
-    }
-
-    public int getId() {
-        return id;
-    }
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-    public void setPermisos(List<String> permisos) {
-        this.permisos = permisos;
-    }
-    public List<String> getPermisos() {
-        return permisos;
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("--- Información del Profesor ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre de Usuario: " + getNombreUsuario());
+        System.out.println("Nombre Completo: " + getNombreCompleto());
+        System.out.println("Correo Electrónico: " + getEmail());
+        System.out.println("Rol: " + getRol().name());
+        System.out.println("Departamento: " + getDepartamento());
+        System.out.println("--------------------------------");
     }
 }

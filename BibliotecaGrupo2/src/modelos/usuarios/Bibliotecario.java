@@ -1,64 +1,29 @@
 package modelos.usuarios;
-import java.util.List;
 public class Bibliotecario extends Usuario {
-    private List<String> permisos;
-    public Bibliotecario(String idUsuario, String nombreUsuario, String contrasena,
-                    String nombreCompleto, String email, List<String> rol, List<String> permisos) {
-        super(idUsuario, nombreUsuario, contrasena, nombreCompleto, email, rol);
-        this.permisos = permisos;
+    public Bibliotecario(int id, String nombreUsuario, String contrasena, String nombreCompleto, String email) {
+        super(id, nombreUsuario, contrasena, nombreCompleto, email, Rol.BIBLIOTECARIO);
     }
-    public String getIdUsuario() {
-        return idUsuario;
+    // Métodos específicos del Operador
+    public void registrarPrestamo() {
+        System.out.println("Operador " + nombreCompleto + " registrando un préstamo.");
+        // Lógica para registrar un préstamo
     }
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public void registrarDevolucion() {
+        System.out.println("Operador " + nombreCompleto + " registrando una devolución.");
+        // Lógica para registrar una devolución
     }
-    public String getContrasena() {
-        return contrasena;
+    public void aplicarSancion() {
+        System.out.println("Operador " + nombreCompleto + " aplicando una sanción.");
+        // Lógica para aplicar una sanción
     }
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public List<String> getRol() {
-        return rol;
-    }
-    public boolean isActivo() {
-        return activo;
-    }
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setRol(List<String> rol) {
-        this.rol = rol;
-    }
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-    public boolean tienePermiso(String permiso) {
-        return permisos != null && permisos.contains(permiso);
-    }
-    public boolean autenticar(String contrasena) {
-        return this.contrasena != null && this.contrasena.equals(contrasena);
-    }
-    public List<String> getPermisos() {
-        return permisos;
-    }
-    public void setPermisos(List<String> permisos) {
-        this.permisos = permisos;
+    @Override
+    public void mostrarInformacion() {
+        System.out.println("--- Información del Operador ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre de Usuario: " + getNombreUsuario());
+        System.out.println("Nombre Completo: " + getNombreCompleto());
+        System.out.println("Correo Electrónico: " + getEmail());
+        System.out.println("Rol: " + getRol().name());
+        System.out.println("--------------------------------");
     }
 }
