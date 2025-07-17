@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import modelos.materiales.Audiovisual;
+import modelos.materiales.CategoriaMaterial;
 import modelos.materiales.Libro;
 import modelos.materiales.Material;
 import modelos.materiales.Revista;
@@ -21,80 +22,109 @@ public class ServicioMaterial {
     
     public void addMaterial(Material material) {
         String sql = "INSERT INTO Materiales ("
-                + "titulo, autor, anoPublicacion, genero, categoria, cantidadDisponible, cantidadTotal, "
-                + "tipoMaterial, isbn, numeroPaginas, editorial, numeroEdicion, institucion, "
-                + "gradoAcademico, formato, duracion) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                + "titulo, autor, anioPublicacion, descripcion, idioma, categoria, "
+                + "cantidadDisponible, cantidadTotal, tipoMaterial, editorial, isbn, "
+                + "numeroPaginas, genero, productora, duracion, formato, universidad, "
+                + "grado, palabrasClave, volumen, numero, fechaPublicacion) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ///asdadasdas
+        ///
+    // getNextId
 
         try {
             conn = dbManager.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, material.getTitulo());
             pstmt.setString(2, material.getAutor());
-            pstmt.setString(3, material.getAnoPublicacion());
-            pstmt.setString(4, material.getGenero());
-            pstmt.setString(5, material.getCategoria().name());
-            pstmt.setInt(6, material.getCantidadDisponible());
-            pstmt.setInt(7, material.getCantidadTotal());
+            pstmt.setInt(3, material.getAnioPublicacion());
+            pstmt.setString(4, material.getDescripcion());
+            pstmt.setString(5, material.getIdioma());
+            pstmt.setString(6, material.getCategoria().name());
+            pstmt.setInt(7, material.getCantidadDisponible());
+            pstmt.setInt(8, material.getCantidadTotal());
+//            pstmt.setString(9, material.getTipoMaterial());
 
             
             if (material instanceof Libro) {
                 Libro libro = (Libro) material;
-                pstmt.setString(8, "LIBRO");
-                pstmt.setString(9, libro.getIsbn());
-                pstmt.setInt(10, libro.getNumeroPaginas());
-                pstmt.setNull(11, java.sql.Types.VARCHAR);
-                pstmt.setNull(12, java.sql.Types.INTEGER);
-                pstmt.setNull(13, java.sql.Types.VARCHAR);
+                pstmt.setString(9, "LIBRO");
+                pstmt.setString(10, libro.getEditorial());
+                pstmt.setString(11, libro.getIsbn());
+                pstmt.setInt(12, libro.getNumeroPaginas());
+                pstmt.setString(13, libro.getGenero());
                 pstmt.setNull(14, java.sql.Types.VARCHAR);
-                pstmt.setNull(15, java.sql.Types.VARCHAR);
+                pstmt.setNull(15, java.sql.Types.INTEGER);
                 pstmt.setNull(16, java.sql.Types.VARCHAR);
+                pstmt.setNull(17, java.sql.Types.VARCHAR);
+                pstmt.setNull(18, java.sql.Types.VARCHAR);
+                pstmt.setNull(19, java.sql.Types.VARCHAR);
+                pstmt.setNull(20, java.sql.Types.INTEGER);
+                pstmt.setNull(21, java.sql.Types.INTEGER);
+                pstmt.setNull(22, java.sql.Types.VARCHAR);
             } else if (material instanceof Revista) {
                 Revista revista = (Revista) material;
-                pstmt.setString(8, "REVISTA");
-                pstmt.setNull(9, java.sql.Types.VARCHAR);
-                pstmt.setNull(10, java.sql.Types.INTEGER);
-                pstmt.setString(11, revista.getEditorial());
-                pstmt.setInt(12, revista.getNumeroEdicion());
+                pstmt.setString(9, "REVISTA");
+                pstmt.setNull(10, java.sql.Types.VARCHAR);
+                pstmt.setNull(11, java.sql.Types.VARCHAR);
+                pstmt.setNull(12, java.sql.Types.INTEGER);
                 pstmt.setNull(13, java.sql.Types.VARCHAR);
                 pstmt.setNull(14, java.sql.Types.VARCHAR);
-                pstmt.setNull(15, java.sql.Types.VARCHAR);
+                pstmt.setNull(15, java.sql.Types.INTEGER);
                 pstmt.setNull(16, java.sql.Types.VARCHAR);
+                pstmt.setNull(17, java.sql.Types.VARCHAR);
+                pstmt.setNull(18, java.sql.Types.VARCHAR);
+                pstmt.setNull(19, java.sql.Types.VARCHAR);
+                pstmt.setInt(20, revista.getVolumen());
+                pstmt.setInt(21, revista.getNumero());
+                pstmt.setString(22, revista.getFechaPublicacion());
             } else if (material instanceof Tesis) {
                 Tesis tesis = (Tesis) material;
-                pstmt.setString(8, "TESIS");
-                pstmt.setNull(9, java.sql.Types.VARCHAR);
-                pstmt.setNull(10, java.sql.Types.INTEGER);
+                pstmt.setString(9, "TESIS");
+                pstmt.setNull(10, java.sql.Types.VARCHAR);
                 pstmt.setNull(11, java.sql.Types.VARCHAR);
                 pstmt.setNull(12, java.sql.Types.INTEGER);
-                pstmt.setString(13, tesis.getInstitucion());
-                pstmt.setString(14, tesis.getGradoAcademico());
-                pstmt.setNull(15, java.sql.Types.VARCHAR);
+                pstmt.setNull(13, java.sql.Types.VARCHAR);
+                pstmt.setNull(14, java.sql.Types.VARCHAR);
+                pstmt.setNull(15, java.sql.Types.INTEGER);
                 pstmt.setNull(16, java.sql.Types.VARCHAR);
+                pstmt.setString(17, tesis.getUniversidad());
+                pstmt.setString(18, tesis.getGradoAcademico());
+                pstmt.setString(19, tesis.getPalabrasClave());
+                pstmt.setNull(20, java.sql.Types.INTEGER);
+                pstmt.setNull(21, java.sql.Types.INTEGER);
+                pstmt.setNull(22, java.sql.Types.VARCHAR);
             } else if (material instanceof Audiovisual) {
                 Audiovisual audiovisual = (Audiovisual) material;
-                pstmt.setString(8, "AUDIOVISUAL");
-                pstmt.setNull(9, java.sql.Types.VARCHAR);
-                pstmt.setNull(10, java.sql.Types.INTEGER);
+                pstmt.setString(9, "AUDIOVISUAL");
+                pstmt.setNull(10, java.sql.Types.VARCHAR);
                 pstmt.setNull(11, java.sql.Types.VARCHAR);
                 pstmt.setNull(12, java.sql.Types.INTEGER);
-                pstmt.setNull(13, java.sql.Types.VARCHAR);
-                pstmt.setNull(14, java.sql.Types.VARCHAR);
-                pstmt.setString(15, audiovisual.getFormato());
-                pstmt.setString(16, audiovisual.getDuracion());
+                pstmt.setString(13, audiovisual.getGenero());
+                pstmt.setString(14, audiovisual.getProductora());
+                pstmt.setInt(15, audiovisual.getDuracion());
+                pstmt.setString(16, audiovisual.getFormato());
+                pstmt.setNull(17, java.sql.Types.VARCHAR);
+                pstmt.setNull(18, java.sql.Types.VARCHAR);
+                pstmt.setNull(19, java.sql.Types.VARCHAR);
+                pstmt.setNull(20, java.sql.Types.INTEGER);
+                pstmt.setNull(21, java.sql.Types.INTEGER);
+                pstmt.setNull(22, java.sql.Types.VARCHAR);
             } else {
-                pstmt.setString(8, "MATERIAL"); // Tipo genérico si no coincide con ninguno
-                pstmt.setNull(9, java.sql.Types.VARCHAR);
-                pstmt.setNull(10, java.sql.Types.INTEGER);
+                pstmt.setString(9, "MATERIAL"); // Tipo genérico si no coincide con ninguno
+                pstmt.setNull(10, java.sql.Types.VARCHAR);
                 pstmt.setNull(11, java.sql.Types.VARCHAR);
                 pstmt.setNull(12, java.sql.Types.INTEGER);
                 pstmt.setNull(13, java.sql.Types.VARCHAR);
                 pstmt.setNull(14, java.sql.Types.VARCHAR);
-                pstmt.setNull(15, java.sql.Types.VARCHAR);
+                pstmt.setNull(15, java.sql.Types.INTEGER);
                 pstmt.setNull(16, java.sql.Types.VARCHAR);
+                pstmt.setNull(17, java.sql.Types.VARCHAR);
+                pstmt.setNull(18, java.sql.Types.VARCHAR);
+                pstmt.setNull(19, java.sql.Types.VARCHAR);
+                pstmt.setNull(20, java.sql.Types.INTEGER);
+                pstmt.setNull(21, java.sql.Types.INTEGER);
+                pstmt.setNull(22, java.sql.Types.VARCHAR);
             }
 
             pstmt.executeUpdate();
@@ -212,34 +242,47 @@ public class ServicioMaterial {
         int id = rs.getInt("id");
         String titulo = rs.getString("titulo");
         String autor = rs.getString("autor");
-        String anoPublicacion = rs.getString("anoPublicacion");
-        String genero = rs.getString("genero");
-        String categoria = rs.getString("categoria");
+        int anioPublicacion = rs.getInt("anioPublicacion");
+        String descripcion = rs.getString("descripcion");
+        String idioma = rs.getString("idioma");
+        String categoriaStr = rs.getString("categoria");
+        CategoriaMaterial categoria = CategoriaMaterial.valueOf(categoriaStr.toUpperCase());
         int cantidadDisponible = rs.getInt("cantidadDisponible");
         int cantidadTotal = rs.getInt("cantidadTotal");
         String tipoMaterial = rs.getString("tipoMaterial");
+        String genero;
 
         Material material = null;
         switch (tipoMaterial) {
             case "LIBRO":
+                String editorial = rs.getString("editorial");
                 String isbn = rs.getString("isbn");
                 int numeroPaginas = rs.getInt("numeroPaginas");
-                material = new Libro(id, titulo, autor, anoPublicacion, genero, categoria, cantidadTotal, isbn, numeroPaginas);
+                genero = rs.getString("genero");
+                material = new Libro(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
+                        tipoMaterial, editorial, isbn, numeroPaginas, genero);
                 break;
             case "REVISTA":
-                String editorial = rs.getString("editorial");
-                int numeroEdicion = rs.getInt("numeroEdicion");
-                material = new Revista(id, titulo, autor, anoPublicacion, genero, categoria, cantidadTotal, editorial, numeroEdicion);
+                int volumen = rs.getInt("volumen");
+                int numero = rs.getInt("numero");
+                String fechaPublicacion = rs.getString("fechaPublicacion");
+                material = new Revista(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
+                        tipoMaterial, volumen, numero, fechaPublicacion);
                 break;
             case "TESIS":
-                String institucion = rs.getString("institucion");
+                String universidad = rs.getString("universidad");
                 String gradoAcademico = rs.getString("gradoAcademico");
-                material = new Tesis(id, titulo, autor, anoPublicacion, genero, categoria, cantidadTotal, institucion, gradoAcademico);
+                String palabrasClave = rs.getString("palabrasClave");
+                material = new Tesis(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
+                        tipoMaterial, universidad, gradoAcademico, palabrasClave);
                 break;
             case "AUDIOVISUAL":
+                genero = rs.getString("genero");
+                String productora = rs.getString("productora");
                 String formato = rs.getString("formato");
-                String duracion = rs.getString("duracion");
-                material = new Audiovisual(id, titulo, autor, anoPublicacion, genero, categoria, cantidadTotal, formato, duracion);
+                int duracion = rs.getInt("duracion");
+                material = new Audiovisual(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
+                        tipoMaterial, genero, productora, formato, duracion);
                 break;
             default:
                 System.err.println("Tipo de material desconocido: " + tipoMaterial);
@@ -252,22 +295,88 @@ public class ServicioMaterial {
     }
     
     public void updateMaterial(Material material) {
-        String sql = "UPDATE Materiales SET titulo = ?, autor = ?, anoPublicacion = ?, "
-                + "genero = ?, categoria = ?, cantidadDisponible = ?, cantidadTotal = ? WHERE id = ?;";
+        String sql = "UPDATE Materiales SET titulo = ?, autor = ?, anioPublicacion = ?, descripcion = ?, "
+                + "idioma = ?, categoria = ?, cantidadDisponible = ?, cantidadTotal = ?, tipoMaterial = ?, "
+                + "editorial = ?, isbn = ?, numeroPaginas = ?, genero = ?, productora = ?, duracion = ?, "
+                + "formato = ?, universidad = ?, grado = ?, palabrasClave = ?, volumen = ?, "
+                + "numero = ?, fechaPublicacion = ? WHERE id = ?;";
         Connection conn = null;
         PreparedStatement pstmt = null;
-
+        
         try {
             conn = dbManager.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, material.getTitulo());
             pstmt.setString(2, material.getAutor());
-            pstmt.setString(3, material.getAnoPublicacion());
-            pstmt.setString(4, material.getGenero());
-            pstmt.setString(5, material.getCategoria().name());
-            pstmt.setInt(6, material.getCantidadDisponible());
-            pstmt.setInt(7, material.getCantidadTotal());
-            pstmt.setInt(8, material.getId());
+            pstmt.setInt(3, material.getAnioPublicacion());
+            pstmt.setString(4, material.getDescripcion());
+            pstmt.setString(5, material.getIdioma());
+            pstmt.setString(6, material.getCategoria().name());
+            pstmt.setInt(7, material.getCantidadDisponible());
+            pstmt.setInt(8, material.getCantidadTotal());
+            pstmt.setString(9, material.getTipoMaterial());
+            
+            String tipoMaterial = material.getTipoMaterial();
+            String editorial = null;
+            String isbn = null;
+            int numeroPaginas = 0;
+            String genero = null;
+            String productora = null;
+            int duracion = 0;
+            String formato = null;
+            String universidad = null;
+            String grado = null;
+            String palabrasClave = null;
+            int volumen = 0;
+            int numero = 0;
+            String fechaPublicacion = null;
+            
+            switch (tipoMaterial) {
+                case "LIBRO":
+                    Libro libro = (Libro) material;
+                    editorial = libro.getEditorial();
+                    isbn = libro.getIsbn();
+                    numeroPaginas = libro.getNumeroPaginas();
+                    genero = libro.getGenero();
+                    break;
+                case "REVISTA":
+                    Revista revista = (Revista) material;
+                    volumen = revista.getVolumen();
+                    numero = revista.getNumero();
+                    fechaPublicacion = revista.getFechaPublicacion();
+                    break;
+                case "TESIS":
+                    Tesis tesis = (Tesis) material;
+                    universidad = tesis.getUniversidad();
+                    grado = tesis.getGradoAcademico();
+                    palabrasClave = tesis.getPalabrasClave();
+                    break;
+                case "AUDIOVISUAL":
+                    Audiovisual audiovisual = (Audiovisual) material;
+                    genero = audiovisual.getGenero();
+                    productora = audiovisual.getProductora();
+                    formato = audiovisual.getFormato();
+                    duracion = audiovisual.getDuracion();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Tipo de material no soportado.");
+            }
+            
+            pstmt.setObject(10, editorial);
+            pstmt.setObject(11, isbn);
+            pstmt.setObject(12, numeroPaginas);
+            pstmt.setObject(13, genero);
+            pstmt.setObject(14, productora);
+            pstmt.setObject(15, duracion);
+            pstmt.setObject(16, formato);
+            pstmt.setObject(17, universidad);
+            pstmt.setObject(18, grado);
+            pstmt.setObject(19, palabrasClave);
+            pstmt.setObject(20, volumen);
+            pstmt.setObject(21, numero);
+            pstmt.setObject(22, fechaPublicacion);
+            pstmt.setInt(23, material.getId());
+            
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 System.out.println("Material actualizado exitosamente: " + material.getTitulo());
