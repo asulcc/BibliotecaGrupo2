@@ -1,29 +1,62 @@
-package modelos.recursos;
+package recursos;
 
 public class SalaEstudio extends Recurso {
-    private final int capacidad;
-    private final boolean tieneProyector;
+    private int capacidadMaxima;
+    private int capacidadActual; // Número de participantes actualmente en la sala (o reservados para el mismo bloque)
 
-    public SalaEstudio(String id, String nombre, String ubicacion, int capacidad, boolean tieneProyector) {
-        super(id, nombre, ubicacion);
-        if (capacidad <= 0) {
-            throw new IllegalArgumentException("La capacidad debe ser mayor que cero");
+    public SalaEstudio(int id, String codigo, String ubicacion, int capacidadMaxima) {
+        super(id, codigo, ubicacion);
+        if (capacidadMaxima < 3 || capacidadMaxima > 5) {
+            throw new IllegalArgumentException("La capacidad máxima de una sala de estudio debe ser entre 3 y 5 participantes.");
         }
-        this.capacidad = capacidad;
-        this.tieneProyector = tieneProyector;
+        this.capacidadMaxima = capacidadMaxima;
+        this.capacidadActual = 0; // Inicialmente la sala está vacía
     }
 
-    public int getCapacidad() {
-        return capacidad;
+    // Getters y Setters específicos
+    public int getCapacidadMaxima() {
+        return capacidadMaxima;
     }
 
-    public boolean hasProyector() {
-        return tieneProyector;
+    public void setCapacidadMaxima(int capacidadMaxima) {
+        if (capacidadMaxima >= 3 && capacidadMaxima <= 5) {
+            this.capacidadMaxima = capacidadMaxima;
+        } else {
+            System.err.println("Advertencia: La capacidad máxima debe ser entre 3 y 5.");
+        }
+    }
+
+    public int getCapacidadActual() {
+        return capacidadActual;
+    }
+
+    public void setCapacidadActual(int capacidadActual) {
+        if (capacidadActual >= 0 && capacidadActual <= capacidadMaxima) {
+            this.capacidadActual = capacidadActual;
+        } else {
+            System.err.println("Advertencia: Capacidad actual inválida. Debe ser entre 0 y " + capacidadMaxima);
+        }
+    }
+
+    /**
+     * Verifica si la sala puede ser reservada para un número específico de participantes.
+     * @param numParticipantes El número de participantes para la reserva.
+     * @return true si la sala puede acomodar ese número de participantes, false en caso contrario.
+     */
+    public boolean puedeReservar(int numParticipantes) {
+        return isDisponible() && numParticipantes >= 3 && numParticipantes <= capacidadMaxima;
     }
 
     @Override
-    public String toString() {
-        return super.toString() + String.format(", capacidad=%d, proyector=%b", capacidad, tieneProyector);
+    public void mostrarDetalles() {
+        System.out.println("--- Detalles de la Sala de Estudio ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Codigo: " + getCodigo());
+        System.out.println("Ubicación: " + getUbicacion());
+        System.out.println("Capacidad Máxima: " + getCapacidadMaxima() + " participantes");
+        System.out.println("Participantes Actuales: " + getCapacidadActual());
+        System.out.println("Disponible: " + (isDisponible() ? "Sí" : "No"));
+        System.out.println("------------------------------------");
     }
 }
 

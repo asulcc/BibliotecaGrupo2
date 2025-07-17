@@ -1,32 +1,42 @@
-package modelos.recursos;
+package recursos;
 
 public class Tableta extends Recurso {
-    private final String marca;
-    private final int pulgadas;
+    private String marca;
+    private String modelo;
 
-    public Tableta(String id, String nombre, String ubicacion, String marca, int pulgadas) {
-        super(id, nombre, ubicacion);
-        if (marca == null || marca.isBlank()) {
-            throw new IllegalArgumentException("La marca no puede estar vacía");
-        }
-        if (pulgadas <= 0) {
-            throw new IllegalArgumentException("Las pulgadas deben ser mayores que cero");
-        }
+    public Tableta(int id, String codigo, String ubicacion, String marca, String modelo) {
+        super(id, codigo, ubicacion);
         this.marca = marca;
-        this.pulgadas = pulgadas;
+        this.modelo = modelo;
     }
 
+    // Getters y Setters específicos
     public String getMarca() {
         return marca;
     }
 
-    public int getPulgadas() {
-        return pulgadas;
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
     }
 
     @Override
-    public String toString() {
-        return super.toString() + String.format(", marca=%s, pulgadas=%d", marca, pulgadas);
+    public void mostrarDetalles() {
+        System.out.println("--- Detalles de la Tableta ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Codigo: " + getCodigo());
+        System.out.println("Ubicación: " + getUbicacion());
+        System.out.println("Marca: " + getMarca());
+        System.out.println("Modelo: " + getModelo());
+        System.out.println("Disponible: " + (isDisponible() ? "Sí" : "No"));
+        System.out.println("----------------------------");
     }
 }
 

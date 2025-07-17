@@ -1,33 +1,41 @@
-package modelos.recursos;
+package recursos;
+public class PC extends Recurso {
+ private String sistemaOperativo;
+    private String especificaciones; // Ej: "Core i7, 16GB RAM, SSD 512GB"
 
-  public class PC extends Recurso {
-    private final String procesador;
-    private final int ramGB;
-
-    public PC(String id, String nombre, String ubicacion, String procesador, int ramGB) {
-        super(id, nombre, ubicacion);
-        if (procesador == null || procesador.isBlank()) {
-            throw new IllegalArgumentException("El procesador no puede estar vacío");
-        }
-        if (ramGB <= 0) {
-            throw new IllegalArgumentException("La RAM debe ser mayor que cero");
-        }
-        this.procesador = procesador;
-        this.ramGB = ramGB;
+    public PC(int id, String codigo, String ubicacion, String sistemaOperativo, String especificaciones) {
+        super(id, codigo, ubicacion);
+        this.sistemaOperativo = sistemaOperativo;
+        this.especificaciones = especificaciones;
     }
 
-    public String getProcesador() {
-        return procesador;
+    // Getters y Setters específicos
+    public String getSistemaOperativo() {
+        return sistemaOperativo;
     }
 
-    public int getRamGB() {
-        return ramGB;
+    public void setSistemaOperativo(String sistemaOperativo) {
+        this.sistemaOperativo = sistemaOperativo;
+    }
+
+    public String getEspecificaciones() {
+        return especificaciones;
+    }
+
+    public void setEspecificaciones(String especificaciones) {
+        this.especificaciones = especificaciones;
     }
 
     @Override
-    public String toString() {
-        return super.toString() + String.format(", procesador=%s, ram=%dGB", procesador, ramGB);
+    public void mostrarDetalles() {
+        System.out.println("--- Detalles de la PC ---");
+        System.out.println("ID: " + getId());
+        System.out.println("Código: " + getCodigo());
+        System.out.println("Ubicación: " + getUbicacion());
+        System.out.println("Sistema Operativo: " + getSistemaOperativo());
+        System.out.println("Especificaciones: " + getEspecificaciones());
+        System.out.println("Disponible: " + (isDisponible() ? "Sí" : "No"));
+        System.out.println("-------------------------");
     }
 }
-    
 

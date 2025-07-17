@@ -1,66 +1,47 @@
-package modelos.recursos;
+package recursos;
 
 public abstract class Recurso {
-    private final String id;            // Identificador alfanumérico único
-    private final String nombre;        // Nombre legible del recurso
-    private String ubicacion;           // Ubicación actual
-    private boolean disponible = true;  // true = libre, false = prestado
-
-    /**
-     * Constructor de Recurso.
-     * @param id Identificador alfanumérico (solo letras y números, sin espacios)
-     */
-    public Recurso(String id, String nombre, String ubicacion) {
-        if (id == null || !id.matches("[A-Za-z0-9]+")) {
-            throw new IllegalArgumentException("El id debe ser alfanumérico (letras y números, sin espacios)");
-        }
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre no puede estar vacío");
-        }
-        if (ubicacion == null || ubicacion.isBlank()) {
-            throw new IllegalArgumentException("La ubicación no puede estar vacía");
-        }
+    protected int id;
+    protected String codigo;
+    protected String ubicacion;
+    protected boolean disponible; // Indica si el recurso está actualmente disponible para uso/reserva
+   public Recurso(int id, String codigo, String ubicacion) {
         this.id = id;
-        this.nombre = nombre;
+        this.codigo = codigo;
         this.ubicacion = ubicacion;
+        this.disponible = true; // Por defecto, un recurso se crea como disponible
     }
-
-    // ---------- GETTERS ----------
-    public String getId() {
+// Getters
+    public int getId() {
         return id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getCodigo() {
+        return codigo;
     }
 
     public String getUbicacion() {
         return ubicacion;
     }
 
-    public boolean getDisponible() {
+    public boolean isDisponible() {
         return disponible;
     }
 
-    // ---------- COMPORTAMIENTO ----------
-    public void moverA(String nuevaUbicacion) {
-        if (nuevaUbicacion == null || nuevaUbicacion.isBlank()) {
-            throw new IllegalArgumentException("La nueva ubicación no puede estar vacía");
-        }
-        this.ubicacion = nuevaUbicacion;
+    // Setters
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public void marcarPrestado() {
-        disponible = false;
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
-    public void marcarDevuelto() {
-        disponible = true;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s[id=%s, nombre=%s, ubicacion=%s, disponible=%b]",
-                             getClass().getSimpleName(), id, nombre, ubicacion, disponible);
-    }
+    // Método abstracto que debe ser implementado por las subclases para mostrar detalles específicos
+    public abstract void mostrarDetalles();
+
 }
