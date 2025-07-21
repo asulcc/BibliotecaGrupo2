@@ -10,7 +10,7 @@ public class Revista extends Material {
             int volumen, 
             int numeroEdicion,
             String fechaPublicacion) {
-        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria.REVISTA, cantidadTotal, tipoMaterial);
+        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal, tipoMaterial);
         this.volumen = volumen;
         this.numeroEdicion = numeroEdicion;
         this.fechaPublicacion = fechaPublicacion;

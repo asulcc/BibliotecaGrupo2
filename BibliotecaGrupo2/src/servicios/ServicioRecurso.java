@@ -4,8 +4,6 @@ import modelos.recursos.Recurso;
 import modelos.recursos.PC;
 import modelos.recursos.Tableta;
 import modelos.recursos.SalaEstudio;
-import modelos.recursos.Recurso.TipoRecurso;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -242,23 +240,23 @@ public class ServicioRecurso {
         String codigo = rs.getString("codigo");
         String ubicacion = rs.getString("ubicacion");
         boolean disponible = rs.getBoolean("disponible");
-        TipoRecurso tipoRecurso = TipoRecurso.valueOf(rs.getString("tipoRecurso"));
+        String tipoRecurso = rs.getString("tipoRecurso");
 
         Recurso recurso = null;
         switch (tipoRecurso) {
-            case PC:
+            case "PC":
                 String sistemaOperativo = rs.getString("sistemaOperativo");
                 String especificaciones = rs.getString("especificaciones");
-                recurso = new PC(id, codigo, ubicacion, tipoRecurso, sistemaOperativo, especificaciones);
+                recurso = new PC(id, codigo, ubicacion, sistemaOperativo, especificaciones);
                 break;
-            case TABLETA:
+            case "TABLETA":
                 String marca = rs.getString("marca");
                 String modelo = rs.getString("modelo");
-                recurso = new Tableta(id, codigo, ubicacion, tipoRecurso, marca, modelo);
+                recurso = new Tableta(id, codigo, ubicacion, marca, modelo);
                 break;
-            case SALAESTUDIO:
+            case "SALA_ESTUDIO":
                 int capacidadMaxima = rs.getInt("capacidadMaxima");
-                recurso = new SalaEstudio(id, codigo, ubicacion, tipoRecurso, capacidadMaxima);
+                recurso = new SalaEstudio(id, codigo, ubicacion, capacidadMaxima);
                 break;
             default:
                 System.err.println("Tipo de recurso desconocido: " + tipoRecurso);

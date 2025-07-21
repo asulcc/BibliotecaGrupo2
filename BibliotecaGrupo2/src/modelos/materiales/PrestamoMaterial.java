@@ -54,21 +54,11 @@ public class PrestamoMaterial extends PrestamoBase {
         this.activo = activo;
     }
 
-    /**
-     * Verifica si el préstamo está vencido.
-     * Un préstamo está vencido si la fecha actual es posterior a la fecha de devolución estimada
-     * y el préstamo aún está activo (no se ha devuelto).
-     * @return true si el préstamo está vencido, false en caso contrario.
-     */
     @Override
     public boolean estaVencido() {
         return activo && LocalDate.now().isAfter(fechaFinPrevista);
     }
 
-    /**
-     * Calcula los días de retraso si el material ha sido devuelto fuera de tiempo.
-     * @return Número de días de retraso, 0 si no hay retraso o si aún no se ha devuelto.
-     */
     public int calcularDiasRetraso() {
         if (fechaDevolucionReal != null && fechaDevolucionReal.isAfter(fechaFinPrevista)) {
             return (int) ChronoUnit.DAYS.between(fechaFinPrevista, fechaDevolucionReal);
@@ -76,10 +66,6 @@ public class PrestamoMaterial extends PrestamoBase {
         return 0;
     }
 
-    /**
-     * Extiende la fecha de devolución estimada.
-     * @param nuevaFecha La nueva fecha de devolución.
-     */
     public void extenderFechaDevolucion(LocalDate nuevaFecha) {
         this.fechaFinPrevista = nuevaFecha;
     }

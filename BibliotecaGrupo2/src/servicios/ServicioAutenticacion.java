@@ -1,45 +1,36 @@
 package servicios;
 
+import modelos.usuarios.Usuario;
+import modelos.usuarios.Rol;
+import modelos.usuarios.Administrador;
+import modelos.usuarios.Bibliotecario;
+import modelos.usuarios.Profesor;
+import modelos.usuarios.Alumno;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import modelos.usuarios.Administrador;
-import modelos.usuarios.Alumno;
-import modelos.usuarios.Bibliotecario;
-import modelos.usuarios.Profesor;
-import modelos.usuarios.Usuario;
-import modelos.usuarios.Usuario.Rol;
-import static modelos.usuarios.Usuario.Rol.ADMINISTRADOR;
-import static modelos.usuarios.Usuario.Rol.ALUMNO;
-import static modelos.usuarios.Usuario.Rol.BIBLIOTECARIO;
-import static modelos.usuarios.Usuario.Rol.PROFESOR;
-
-public class ServicioAutenticacion {
+public class ServicioAutenticacion<T extends Usuario> {
     private final BaseDatos dbManager;
 
     public ServicioAutenticacion(BaseDatos dbManager) {
         this.dbManager = dbManager;
     }
-    
-    /**
-     * Se autentica un usuario con el nombre de usuario y contraseña proporcionados.
-     */
-    public Usuario login(String nombreUsuario, String contrasena) {
-        String sql = "SELECT id, nombreUsuario, contrasena, nombreCompleto, correoElectronico, rol, "
-                + "carrera, codigoUniversitario, departamento FROM Usuarios "
-                + "WHERE nombreUsuario = ? AND contrasena = ?;";
+
+    public T login(String nombreUsuario, String contrasena) {
+        String sql = "SELECT id, nombreUsuario, contrasena, nombreCompleto, correoElectronico, rol, carrera, codigoUniversitario, departamento FROM Usuarios WHERE nombreUsuario = ? AND contrasena = ?;";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        Usuario usuario = null;
+        T usuario = null;
 
         try {
             conn = dbManager.getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nombreUsuario);
-            pstmt.setString(2, contrasena);
+            pstmt.setString(2, contrasena); // En un sistema real, se usaría hashing de contraseñas
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -52,19 +43,19 @@ public class ServicioAutenticacion {
 
                 switch (rol) {
                     case ADMINISTRADOR:
-                        usuario = new Administrador(id, nomUser, pass, nomCompleto, correo);
+                        usuario = (T) new Administrador(id, nomUser, pass, nomCompleto, correo);
                         break;
                     case BIBLIOTECARIO:
-                        usuario = new Bibliotecario(id, nomUser, pass, nomCompleto, correo);
+                        usuario = (T) new Bibliotecario(id, nomUser, pass, nomCompleto, correo);
                         break;
                     case PROFESOR:
                         String departamento = rs.getString("departamento");
-                        usuario = new Profesor(id, nomUser, pass, nomCompleto, correo, departamento);
+                        usuario = (T) new Profesor(id, nomUser, pass, nomCompleto, correo, departamento);
                         break;
                     case ALUMNO:
                         String carrera = rs.getString("carrera");
                         String codigoUniversitario = rs.getString("codigoUniversitario");
-                        usuario = new Alumno(id, nomUser, pass, nomCompleto, correo, carrera, codigoUniversitario);
+                        usuario = (T) new Alumno(id, nomUser, pass, nomCompleto, correo, carrera, codigoUniversitario);
                         break;
                     default:
                         System.err.println("Rol de usuario desconocido: " + rol);
@@ -75,23 +66,17 @@ public class ServicioAutenticacion {
             System.err.println("Error al intentar login: " + e.getMessage());
         } finally {
             dbManager.closeConnection(conn);
-            if (pstmt != null) try { pstmt.close(); } catch (SQLException e) {  }
-            if (rs != null) try { rs.close(); } catch (SQLException e) {  }
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException e) { /* ignore */ }
+            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignore */ }
         }
         return usuario;
     }
-    
-    /**
-     * proceso de logout.
-     */
+
     public boolean logout() {
         System.out.println("Sesión cerrada exitosamente.");
         return true;
     }
 
-    /**
-     * Permite a un usuario cambiar su contraseña.
-     */
     public boolean cambiarContrasena(Usuario usuario, String nuevaContrasena) {
         String sql = "UPDATE Usuarios SET contrasena = ? WHERE id = ?;";
         Connection conn = null;
@@ -120,10 +105,7 @@ public class ServicioAutenticacion {
         return exito;
     }
 
-    /**
-     * Verifica si un usuario tiene el rol requerido para realizar una acción.
-     */
-    public boolean tienePermiso(Usuario usuario, Rol rolRequerido) {
+    public boolean tienePermiso(T usuario, Rol rolRequerido) {
         if (usuario == null) {
             return false;
         }
@@ -135,7 +117,7 @@ public class ServicioAutenticacion {
         if (usuario.getRol() == Rol.BIBLIOTECARIO && (rolRequerido == Rol.BIBLIOTECARIO || rolRequerido == Rol.ALUMNO || rolRequerido == Rol.PROFESOR)) {
             return true;
         }
-        // Otros roles
+        // Otros roles deben coincidir exactamente
         return usuario.getRol() == rolRequerido;
     }
 }

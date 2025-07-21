@@ -79,20 +79,12 @@ public class ReservaRecurso extends PrestamoBase {
         }
     }
 
-    /**
-     * Verifica si la reserva ha vencido (si la hora actual es posterior a la hora de fin).
-     * @return true si la reserva ha vencido y está activa, false en caso contrario.
-     */
     @Override
     public boolean estaVencido() {
         // Se considera vencida si la fecha y hora actual es posterior a la fechaHoraFin
         return activo && LocalDateTime.now().isAfter(fechaHoraFin);
     }
 
-    /**
-     * Calcula la duración de la reserva en minutos.
-     * @return La duración en minutos.
-     */
     public long calcularDuracionEnMinutos() {
         return ChronoUnit.MINUTES.between(fechaHoraInicio, fechaHoraFin);
     }

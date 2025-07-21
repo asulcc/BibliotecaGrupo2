@@ -4,12 +4,12 @@ public class Audiovisual extends Material {
     private String genero;
     private String productora;
     private String formato; // Ej: DVD, Blu-ray, CD-Audio, MP4, etc.
-    private int duracion; // Ej: "1h 30m", "45 min", "2h 15m"
+    private int duracion; // en minutos: "90", "45", "130"
 
     public Audiovisual(int id, String titulo, String autor, int anioPublicacion, String descripcion, 
             String idioma, CategoriaMaterial categoria, int cantidadTotal, String tipoMaterial,
             String genero, String productora, String formato, int duracion) {
-        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria.AUDIOVISUAL, cantidadTotal, tipoMaterial);
+        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal, tipoMaterial);
         this.genero = genero;
         this.productora = productora;
         this.formato = formato;

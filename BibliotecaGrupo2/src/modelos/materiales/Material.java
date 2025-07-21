@@ -1,12 +1,6 @@
 package modelos.materiales;
 
 public abstract class Material {
-    public enum CategoriaMaterial {
-        LIBRO,
-        AUDIOVISUAL,
-        REVISTA,
-        TESIS
-    }
     protected int id;
     protected String titulo;
     protected String autor;
@@ -18,8 +12,8 @@ public abstract class Material {
     protected int cantidadTotal;
     protected String tipoMaterial;
 
-    public Material(int id, String titulo, String autor, int anioPublicacion, String descripcion, 
-                String idioma, CategoriaMaterial categoria, int cantidadTotal, String tipoMaterial) {
+    public Material(int id, String titulo, String autor, int anioPublicacion, String descripcion, String idioma, 
+                CategoriaMaterial categoria, int cantidadTotal,String tipoMaterial) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;

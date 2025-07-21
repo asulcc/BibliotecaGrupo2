@@ -48,7 +48,6 @@ public class ServicioPrestamo {
         }
 
         LocalDate fechaPrestamo = LocalDate.now();
-        // Lógica de fechas: 7 días para préstamos de materiales
         LocalDate fechaDevolucionEstimada = fechaPrestamo.plusDays(7);
 
         String sql = "INSERT INTO PrestamosMaterial (usuarioId, materialId, "
@@ -211,8 +210,6 @@ public class ServicioPrestamo {
             pstmt.setBoolean(6, true); // Activo
             pstmt.executeUpdate();
 
-            // Marcar el recurso como no disponible si no es una Sala de Estudio
-            // Para Salas de Estudio, la disponibilidad se maneja por franjas horarias y capacidad
             if (!(recurso instanceof SalaEstudio)) {
                 recurso.setDisponible(false);
                 servicioRecurso.updateRecurso(recurso);

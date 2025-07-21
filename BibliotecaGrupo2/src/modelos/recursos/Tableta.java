@@ -4,8 +4,8 @@ public class Tableta extends Recurso {
     private String marca;
     private String modelo;
 
-    public Tableta(int id, String codigo, String ubicacion, TipoRecurso tipo, String marca, String modelo) {
-        super(id, codigo, ubicacion, tipo.TABLETA);
+    public Tableta(int id, String codigo, String ubicacion, String marca, String modelo) {
+        super(id, codigo, ubicacion);
         this.marca = marca;
         this.modelo = modelo;
     }
@@ -39,4 +39,3 @@ public class Tableta extends Recurso {
         System.out.println("----------------------------");
     }
 }
-

@@ -1,10 +1,11 @@
 package servicios;
 
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class BaseDatos {
     private static final String DB_URL = "jdbc:sqlite:./db/biblioteca.db";
@@ -41,16 +42,18 @@ public class BaseDatos {
         }
     }
     
-    // Método para obtener el siguiente ID disponible en la base de datos.
     public int getNextId(String tableName) {
         String sql = "SELECT MAX(id) FROM " + tableName + ";";
         try (Connection conn = getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
+                // Si la tabla está vacía, MAX(id) será 0, así que sumamos 1.
+                // Si hay IDs, obtendremos el siguiente consecutivo.
                 return rs.getInt(1) + 1;
             }
         } catch (SQLException e) {
             System.err.println("Error al obtener el siguiente ID para la tabla " + tableName + ": " + e.getMessage());
+            // No lances RuntimeException aquí para no detener la aplicación si el ID no es crítico.
         }
-        return 1; 
+        return 1; // Si hay un error o la tabla no tiene registros, empieza desde 1.
     }
 }

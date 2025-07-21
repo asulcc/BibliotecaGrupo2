@@ -2,10 +2,10 @@ package modelos.recursos;
 
 public class SalaEstudio extends Recurso {
     private int capacidadMaxima;
-    private int capacidadActual; // Número de participantes actualmente en la sala (o reservados para el mismo bloque)
+    private int capacidadActual; 
 
-    public SalaEstudio(int id, String codigo, String ubicacion, TipoRecurso tipo, int capacidadMaxima) {
-        super(id, codigo, ubicacion, tipo.SALAESTUDIO);
+    public SalaEstudio(int id, String codigo, String ubicacion, int capacidadMaxima) {
+        super(id, codigo, ubicacion);
         if (capacidadMaxima < 3 || capacidadMaxima > 5) {
             throw new IllegalArgumentException("La capacidad máxima de una sala de estudio debe ser entre 3 y 5 participantes.");
         }
@@ -38,7 +38,6 @@ public class SalaEstudio extends Recurso {
         }
     }
 
-    
     public boolean puedeReservar(int numParticipantes) {
         return isDisponible() && numParticipantes >= 3 && numParticipantes <= capacidadMaxima;
     }
@@ -55,4 +54,3 @@ public class SalaEstudio extends Recurso {
         System.out.println("------------------------------------");
     }
 }
-

@@ -7,6 +7,7 @@ import modelos.usuarios.Administrador;
 import modelos.usuarios.Bibliotecario;
 import modelos.usuarios.Profesor;
 import modelos.usuarios.Alumno;
+import modelos.usuarios.Rol;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,11 +16,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import modelos.usuarios.Usuario.Rol;
-import static modelos.usuarios.Usuario.Rol.ADMINISTRADOR;
-import static modelos.usuarios.Usuario.Rol.ALUMNO;
-import static modelos.usuarios.Usuario.Rol.BIBLIOTECARIO;
-import static modelos.usuarios.Usuario.Rol.PROFESOR;
 
 
 public class ServicioSancion {
@@ -193,8 +189,9 @@ public class ServicioSancion {
 
         // Obtener el objeto PrestamoMaterial asociado (puede ser nulo)
         PrestamoMaterial prestamoAsociado = null;
-        if (prestamoAsociadoId > 0) { // Un ID de 0 o negativo podría indicar que no hay préstamo asociado
+        if (prestamoAsociadoId > 0) { 
             // Un ID de 0 o negativo podría indicar que no hay préstamo asociado
+            System.out.println("No hay prestamo asociado al usuario");
         }
 
         Sancion sancion = new Sancion(id, usuarioSancionado, null, descripcion, fechaSancion, fechaFinSancion);

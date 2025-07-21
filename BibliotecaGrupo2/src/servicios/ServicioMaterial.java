@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import modelos.materiales.Audiovisual;
+import modelos.materiales.CategoriaMaterial;
 import modelos.materiales.Libro;
 import modelos.materiales.Material;
-import modelos.materiales.Material.CategoriaMaterial;
 import modelos.materiales.Revista;
 import modelos.materiales.Tesis;
 

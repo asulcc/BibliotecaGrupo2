@@ -8,8 +8,11 @@ public class Libro extends Material {
 
     public Libro(int id, String titulo, String autor, int anioPublicacion, String descripcion, 
             String idioma, CategoriaMaterial categoria, int cantidadTotal, String tipoMaterial,
-            String editorial, String isbn, int numeroPaginas, String genero) {
-        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria.LIBRO, cantidadTotal, tipoMaterial);
+            String editorial, 
+            String isbn, 
+            int numeroPaginas, 
+            String genero) {
+        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal, tipoMaterial);
         this.editorial = editorial;
         this.isbn = isbn;
         this.numeroPaginas = numeroPaginas;

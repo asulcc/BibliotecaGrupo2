@@ -1,31 +1,35 @@
 package main;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import servicios.BaseDatos;
 import modelos.Sancion;
-import modelos.materiales.Audiovisual;
+import modelos.materiales.CategoriaMaterial;
 import modelos.materiales.Libro;
-import modelos.materiales.Material;
-import modelos.materiales.Material.CategoriaMaterial;
-import modelos.materiales.PrestamoMaterial;
 import modelos.materiales.Revista;
 import modelos.materiales.Tesis;
+import modelos.materiales.Audiovisual;
+import modelos.materiales.Material;
+import modelos.materiales.PrestamoMaterial;
 import modelos.recursos.PC;
 import modelos.recursos.Recurso;
 import modelos.recursos.ReservaRecurso;
 import modelos.recursos.SalaEstudio;
 import modelos.recursos.Tableta;
+import modelos.usuarios.Rol;
 import modelos.usuarios.Usuario;
-import modelos.usuarios.Usuario.Rol;
-import servicios.BaseDatos;
 import servicios.ServicioAutenticacion;
 import servicios.ServicioMaterial;
 import servicios.ServicioPrestamo;
 import servicios.ServicioRecurso;
 import servicios.ServicioSancion;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.List;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 public class Main {
+
     private final Scanner scanner;
     private BaseDatos dbManager;
     private ServicioAutenticacion autenticacionService;
@@ -34,13 +38,14 @@ public class Main {
     private ServicioPrestamo prestamoService;
     private ServicioSancion sancionService;
 
-     // El usuario que inicia sesión
-    private Usuario usuarioActual;
+    private Usuario usuarioActual; // El usuario que ha iniciado sesión
 
-    
+    // getNextId
     public Main() {
         scanner = new Scanner(System.in);
         dbManager = new BaseDatos();
+//        dbManager.createTables(); // Aseguramos que la base de datos esté lista
+//        dbManager.insertInitialData(); // Aseguramos que la base de datos esté lista
 
         // Inicializar servicios, inyectando dependencias
         autenticacionService = new ServicioAutenticacion(dbManager);
@@ -55,8 +60,7 @@ public class Main {
         System.out.println("¡Bienvenido al Sistema de Gestión de Biblioteca!");
         mostrarMenuPrincipal();
     }
-    
-    // Método del menú principal
+
     private void mostrarMenuPrincipal() {
         int opcion;
         do {
@@ -73,8 +77,7 @@ public class Main {
             }
         } while (opcion != 0);
     }
-    
-    // proceso de inicio de sesión
+
     private void iniciarSesion() {
         System.out.print("Nombre de usuario: ");
         String nombreUsuario = scanner.nextLine();
@@ -84,16 +87,13 @@ public class Main {
         usuarioActual = autenticacionService.login(nombreUsuario, contrasena);
 
         if (usuarioActual != null) {
-            System.out.println("¡Inicio de sesión exitoso! Bienvenido, " 
-                    + usuarioActual.getNombreCompleto() 
-                    + " (" + usuarioActual.getRol().name() + ").");
+            System.out.println("¡Inicio de sesión exitoso! Bienvenido, " + usuarioActual.getNombreCompleto() + " (" + usuarioActual.getRol().name() + ").");
             mostrarMenuPorRol();
         } else {
             System.out.println("Nombre de usuario o contraseña incorrectos.");
         }
     }
-    
-    // Menú  de opciones generales
+
     private void mostrarMenuPorRol() {
         int opcion;
         do {
@@ -102,7 +102,7 @@ public class Main {
             System.out.println("2. Gestión de Recursos (CRUD)");
             System.out.println("3. Gestión de Préstamos y Reservas");
             System.out.println("4. Gestión de Sanciones");
-            System.out.println("5. Ver Mis Préstamos/Reservas/Sanciones");
+            System.out.println("5. Ver Mis Préstamos/Reservas/Sanciones"); // Para todos los usuarios
             System.out.println("6. Cambiar Contraseña");
             System.out.println("0. Cerrar Sesión");
             System.out.print("Seleccione una opción: ");
@@ -113,32 +113,28 @@ public class Main {
                     if (autenticacionService.tienePermiso(usuarioActual, Rol.BIBLIOTECARIO)) {
                         menuGestionMateriales();
                     } else {
-                        System.out.println("Permiso denegado. Solo Operadores y "
-                                + "Administradores pueden gestionar materiales.");
+                        System.out.println("Permiso denegado. Solo Operadores y Administradores pueden gestionar materiales.");
                     }
                     break;
                 case 2:
                     if (autenticacionService.tienePermiso(usuarioActual, Rol.BIBLIOTECARIO)) {
                         menuGestionRecursos();
                     } else {
-                        System.out.println("Permiso denegado. Solo Operadores y "
-                                + "Administradores pueden gestionar recursos.");
+                        System.out.println("Permiso denegado. Solo Operadores y Administradores pueden gestionar recursos.");
                     }
                     break;
                 case 3:
                     if (autenticacionService.tienePermiso(usuarioActual, Rol.BIBLIOTECARIO)) {
                         menuGestionPrestamosReservas();
                     } else {
-                        System.out.println("Permiso denegado. Solo Operadores y "
-                                + "Administradores pueden gestionar préstamos y reservas.");
+                        System.out.println("Permiso denegado. Solo Operadores y Administradores pueden gestionar préstamos y reservas.");
                     }
                     break;
                 case 4:
                     if (autenticacionService.tienePermiso(usuarioActual, Rol.BIBLIOTECARIO)) {
                         menuGestionSanciones();
                     } else {
-                        System.out.println("Permiso denegado. Solo Operadores y "
-                                + "Administradores pueden gestionar sanciones.");
+                        System.out.println("Permiso denegado. Solo Operadores y Administradores pueden gestionar sanciones.");
                     }
                     break;
                 case 5:
@@ -157,7 +153,6 @@ public class Main {
         } while (opcion != 0);
     }
 
-    // Cmabiar contraseña de usuario actual
     private void cambiarContrasena() {
         System.out.print("Ingrese la nueva contraseña: ");
         String nuevaContrasena = scanner.nextLine();
@@ -168,10 +163,10 @@ public class Main {
         }
     }
 
-    // Ver datos generales del usuario actaul
     private void verMisDatosUsuario() {
         System.out.println("\n--- MIS DATOS DE USUARIO ---");
         usuarioActual.mostrarInformacion();
+//        usuarioActual.toString();
 
         System.out.println("\n--- MIS PRÉSTAMOS DE MATERIAL ---");
         List<PrestamoMaterial> misPrestamos = prestamoService.getPrestamosPorUsuario(usuarioActual);
@@ -198,15 +193,14 @@ public class Main {
         } else {
             misSanciones.forEach(System.out::println);
             if (sancionService.usuarioEstaSancionado(usuarioActual)) {
-                System.out.println("\n¡ADVERTENCIA: Usted está sancionado actualmente y "
-                        + "no puede realizar préstamos/reservas!");
+                System.out.println("\n¡ADVERTENCIA: Usted está sancionado actualmente y no puede realizar préstamos/reservas!");
             }
         }
         System.out.println("Presione Enter para continuar...");
         scanner.nextLine();
     }
-    
-// --- Métodos de Gestión de Materiales (CRUD) ---
+
+    // --- Métodos de Gestión de Materiales (CRUD) ---
     private void menuGestionMateriales() {
         int opcion;
         do {
@@ -454,8 +448,6 @@ public class Main {
                 System.out.println("Cantidad total inválida. Se mantiene la anterior.");
             }
         }
-        // La cantidad disponible se ajusta automáticamente si se modifica la total.
-        // Si se necesita ajustar la disponible directamente, habría que añadir un campo también.
 
         materialService.updateMaterial(material);
     }

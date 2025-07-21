@@ -7,8 +7,10 @@ public class Tesis extends Material {
 
     public Tesis(int id, String titulo, String autor, int anioPublicacion, String descripcion, 
             String idioma, CategoriaMaterial categoria, int cantidadTotal, String tipoMaterial,
-            String universidad, String gradoAcademico, String palabrasClave) {
-        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria.TESIS, cantidadTotal, tipoMaterial);
+            String universidad, 
+            String gradoAcademico, 
+            String palabrasClave) {
+        super(id, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal, tipoMaterial);
         this.gradoAcademico = gradoAcademico;
         this.universidad = universidad;
         this.palabrasClave = palabrasClave;
