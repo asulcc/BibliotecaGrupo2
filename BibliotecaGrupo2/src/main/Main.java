@@ -40,12 +40,9 @@ public class Main {
 
     private Usuario usuarioActual; // El usuario que ha iniciado sesión
 
-    // getNextId
     public Main() {
         scanner = new Scanner(System.in);
         dbManager = new BaseDatos();
-//        dbManager.createTables(); // Aseguramos que la base de datos esté lista
-//        dbManager.insertInitialData(); // Aseguramos que la base de datos esté lista
 
         // Inicializar servicios, inyectando dependencias
         autenticacionService = new ServicioAutenticacion(dbManager);
@@ -255,13 +252,13 @@ public class Main {
         System.out.print("Cantidad Total: ");
         int cantidadTotal = leerEntero();
 
-        System.out.println("Seleccione tipo de material:");
-        System.out.println("1. Libro");
-        System.out.println("2. Revista");
-        System.out.println("3. Tesis");
-        System.out.println("4. Audiovisual");
-        System.out.print("Opción: ");
-        int tipo = leerEntero();
+//        System.out.println("Seleccione tipo de material:");
+//        System.out.println("1. Libro");
+//        System.out.println("2. Revista");
+//        System.out.println("3. Tesis");
+//        System.out.println("4. Audiovisual");
+//        System.out.print("Opción: ");
+//        int tipo = leerEntero();
         
         String genero;
         String tipoMaterial;
@@ -269,8 +266,8 @@ public class Main {
         Material nuevoMaterial = null;
         int nuevoId = dbManager.getNextId("Materiales"); // Obtener el siguiente ID disponible
 
-        switch (tipo) {
-            case 1: // Libro
+        switch (categoria) {
+            case LIBRO: // Libro
                 tipoMaterial = "LIBRO";
                 System.out.print("Editorial: ");
                 String editorial = scanner.nextLine();
@@ -283,7 +280,7 @@ public class Main {
                 nuevoMaterial = new Libro(nuevoId, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
                         tipoMaterial, editorial, isbn, numeroPaginas, genero);
                 break;
-            case 2: // Revista
+            case REVISTA: // Revista
                 tipoMaterial = "REVISTA";
                 System.out.print("Numero de Volumen: ");
                 int volumen = leerEntero();
@@ -294,7 +291,7 @@ public class Main {
                 nuevoMaterial = new Revista(nuevoId, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
                         tipoMaterial, volumen, numero, fechaPublicacion);
                 break;
-            case 3: // Tesis
+            case TESIS: // Tesis
                 tipoMaterial = "TESIS";
                 System.out.print("Universidad: ");
                 String universidad = scanner.nextLine();
@@ -305,7 +302,7 @@ public class Main {
                 nuevoMaterial = new Tesis(nuevoId, titulo, autor, anioPublicacion, descripcion, idioma, categoria, cantidadTotal,
                         tipoMaterial, universidad, gradoAcademico, palabrasClave);
                 break;
-            case 4: // Audiovisual
+            case AUDIOVISUAL: // Audiovisual
                 tipoMaterial = "AUDIOVISUAL";
                 System.out.print("Genero: ");
                 genero = scanner.nextLine();
@@ -883,7 +880,6 @@ public class Main {
         System.out.println("\n--- VER SANCIONES POR USUARIO ---");
         System.out.print("Ingrese el ID del usuario: ");
         int idUsuario = leerEntero();
-        scanner.nextLine(); // Consumir nueva línea
 
         Usuario usuario = sancionService.getUsuarioById(idUsuario);
         if (usuario == null) {
